@@ -1,11 +1,16 @@
 package com.revature.eval.java.core;
 
+import java.util.*;
+
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class EvaluationService {
 
+	
 	/**
 	 * 1. Without using the StringBuilder or StringBuffer class, write a method that
 	 * reverses a String. Example: reverse("example"); -> "elpmaxe"
@@ -20,6 +25,7 @@ public class EvaluationService {
 		}
 		return new String(reversed);
 	}
+	
 
 	/**
 	 * 2. Convert a phrase to its acronym. Techies love their TLA (Three Letter
@@ -29,9 +35,15 @@ public class EvaluationService {
 	 * @param phrase
 	 * @return
 	 */
-	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public String acronym(String phrase) { 
+		String capLettersString = Character.toString(phrase.charAt(0)); 
+		for (int i = 0 ; i < phrase.length() ; i++ ) { 
+			if (Character.isSpaceChar((Character)phrase.charAt(i)) || ((Character)phrase.charAt(i)).equals((Character)'-')) {
+				//locates index of spaces 
+				capLettersString = capLettersString.concat(Character.toString(phrase.charAt(i+1))); 
+			}
+		}
+		return capLettersString.toUpperCase();
 	}
 
 	/**
@@ -84,18 +96,28 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
+			if (sideOne == sideTwo && sideOne == sideThree && sideTwo == sideThree) {
+				return true; 
+			} else {
 			return false;
+			}
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
+			if (this.isEquilateral()) {
+				return true; 
+			} else if (!(this.isScalene())) {
+				return true; 
+			} else 
 			return false;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
+			if (sideOne != sideTwo && sideOne != sideThree && sideTwo != sideThree) {
+				return true; 
+			} else {
 			return false;
+			}
 		}
 
 	}
@@ -116,9 +138,101 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		//local variables 
+		int cumScore = 0; 
+		int letterScore = 0; 
+		//loop through letters, adding a letter score to the cumScore each time.
+		for (int i = 0; i <string.length(); i++ ) {
+			Character letter = string.toLowerCase().charAt(i); 
+			switch(letter) {
+				case 'a': 
+					letterScore = 1; 
+					break;
+				case 'e': 
+					letterScore = 1; 
+					break; 
+				case 'i': 
+					letterScore = 1; 
+					break; 
+				case 'o': 
+					letterScore = 1; 
+					break; 
+				case 'u': 
+					letterScore = 1; 
+					break; 
+				case 'l': 
+					letterScore = 1; 
+					break;
+				case 'n': 
+					letterScore = 1; 
+					break;
+				case 'r': 
+					letterScore = 1; 
+					break;
+				case 's': 
+					letterScore = 1; 
+					break;
+				case 't': 
+					letterScore = 1; 
+					break;
+				case 'd': 
+					letterScore = 2; 
+					break;
+				case 'g': 
+					letterScore = 2; 
+					break;
+				case 'b': 
+					letterScore = 3; 
+					break;
+				case 'c': 
+					letterScore = 3; 
+					break;
+				case 'm': 
+					letterScore = 3; 
+					break;
+				case 'p': 
+					letterScore = 3; 
+					break; 
+				case 'f': 
+					letterScore = 4; 
+					break;
+				case 'h': 
+					letterScore = 4; 
+					break;
+				case 'v': 
+					letterScore = 4; 
+					break;
+				case 'w': 
+					letterScore = 4; 
+					break;
+				case 'y': 
+					letterScore = 4; 
+					break; 
+				case 'k': 
+					letterScore = 5; 
+					break;
+				case 'j': 
+					letterScore = 8; 
+					break; 
+				case 'x': 
+					letterScore = 8; 
+					break;
+				case 'q': 
+					letterScore = 10; 
+					break; 
+				case 'z': 
+					letterScore = 10; 
+					break;
+				default: 
+					break; 
+			}
+			//end of switch block 
+			cumScore = cumScore + letterScore;  
+		}
+		//end of loop through letters 
+		return cumScore; 
 	}
+	//end of getScrabbleScore method 
 
 	/**
 	 * 5. Clean up user-entered phone numbers so that they can be sent SMS messages.
@@ -151,9 +265,25 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
-	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+	public String cleanPhoneNumber(String string) throws IllegalArgumentException {
+		String cleanNum = ""; 
+		for(int i = 0; i < string.length(); i++ ) {
+			//if statement for permitted characters to be excluded from cleanNUm
+			if (Character.isSpaceChar((Character)string.charAt(i)) || ((Character)string.charAt(i)).equals((Character)'.') || ((Character)string.charAt(i)).equals((Character)'(') || ((Character)string.charAt(i)).equals((Character)')') || ((Character)string.charAt(i)).equals((Character)'-')) {
+				continue; 
+			} else if (Character.isLetter(string.charAt(i))) {
+				throw new IllegalArgumentException("Letters and special characters are not permitted"); 
+			} else if (!(Character.isDigit(string.charAt(i)))) {
+				throw new IllegalArgumentException("Letters and special characters are not permitted"); 
+			} else {
+				//we catch the permitted characters and concatenate to cleanNum
+				cleanNum = cleanNum.concat(Character.toString(string.charAt(i))); 
+			}
+		}
+		if (cleanNum.length() > 10) {
+			throw new IllegalArgumentException("Please enter a 10 digit number"); 
+		}
+		return cleanNum;
 	}
 
 	/**
@@ -166,8 +296,53 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		//declare things
+		Map<String, Integer> dictionary = new HashMap<>(); 
+		int wordStartIndex = 0; 
+		int wordEndIndex = 0;  
+		//logic of method 
+		if (string.contains("\n")) {
+			for (int i = 0; i < string.length(); i++) {
+				if (((Character)string.charAt(i)).equals((Character)',') || (i == (string.length()-1))) {
+					//consider case of reaching end of string
+					if (i == (string.length()-1)) {
+						wordEndIndex = i+1; 
+					} else  {	
+						wordEndIndex = i; 
+					}
+					//get end of word index, generate substring, check if in dictionary, update dictionary, wordStartIndex 
+					String subString = string.substring(wordStartIndex, wordEndIndex);
+					if (!(dictionary.containsKey(subString))) {
+						dictionary.put(subString, 1); 
+					} else {
+						dictionary.put(subString, dictionary.get(subString) + 1);
+					}
+					if (!(i == (string.length()-1))) {
+						wordStartIndex = i + 2; 
+					}
+				}	
+			}
+		} else {
+			for (int j = 0; j < string.length(); j++) {
+				if (Character.isSpaceChar((Character)string.charAt(j)) || ((Character)string.charAt(j)).equals((Character)',') || (j == (string.length()-1))) { 
+					if (j == (string.length()-1)) {
+						wordEndIndex = j+1; 
+					} else  {
+						wordEndIndex = j; 
+					}
+					String subString = string.substring(wordStartIndex, wordEndIndex);
+					if (!(dictionary.containsKey(subString))) {
+						dictionary.put(subString, 1); 
+					} else {
+						dictionary.put(subString, dictionary.get(subString) + 1);
+					}
+					if (!(j == (string.length()-1))) {
+						wordStartIndex = j + 1;
+					}
+				}
+			}
+		}
+		return dictionary;
 	}
 
 	/**
@@ -206,22 +381,33 @@ public class EvaluationService {
 	 * 
 	 */
 	static class BinarySearch<T> {
+		
 		private List<T> sortedList;
-
+		
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			int highIndex = sortedList.size() - 1; 
+			int lowIndex = 0;
+			
+			//return statement 
+			return sortedList.indexOf(t);  
 		}
 
+		//I'm adding a helper here 
+		public void searcherMethod (T high, T low, T t) {
+		}
+
+		//constructor for the class
 		public BinarySearch(List<T> sortedList) {
 			super();
 			this.sortedList = sortedList;
 		}
-
+		
+		//getter for its sortedList field 
 		public List<T> getSortedList() {
 			return sortedList;
 		}
-
+		
+		//setter for the sortedList field 
 		public void setSortedList(List<T> sortedList) {
 			this.sortedList = sortedList;
 		}
@@ -246,8 +432,46 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		int wordStartIndex = 0; 
+		int wordEndIndex = 0;  
+		String pigString = ""; 
+		String pigSuffix = "ay"; 
+		for (int i = 0; i < string.length(); i++) {
+			if (Character.isSpaceChar((Character)string.charAt(i)) || (i == (string.length()-1))) {
+				if (i == (string.length()-1)) {
+					wordEndIndex = i+1; 
+				} else  {
+					wordEndIndex = i; 
+				}
+				String subString = string.substring(wordStartIndex, wordEndIndex);
+				if (((Character)subString.charAt(0)).equals((Character)'a') || ((Character)subString.charAt(0)).equals((Character)'e') || ((Character)subString.charAt(0)).equals((Character)'i') || ((Character)subString.charAt(0)).equals((Character)'o') || ((Character)subString.charAt(0)).equals((Character)'o')) {
+					String pigPrefix = subString; 
+					String pigWord = pigPrefix.concat(pigSuffix); 
+					pigString = pigString.concat(pigWord); 
+				} else {
+					for (int j = 0; j < subString.length(); j++) {
+						if (((Character)subString.charAt(j)).equals((Character)'a') || ((Character)subString.charAt(j)).equals((Character)'e') || ((Character)subString.charAt(j)).equals((Character)'i') || ((Character)subString.charAt(j)).equals((Character)'o') || ((Character)subString.charAt(j)).equals((Character)'u')) {
+							if (((Character)subString.charAt(j)).equals((Character)'u') && ((Character)subString.charAt(j+1)).equals((Character)'i')) {
+								String pigEnd = subString.substring(0,j+1).concat(pigSuffix);
+								String pigWord = subString.substring(j+1, subString.length()).concat(pigEnd);
+								pigString = pigString.concat(pigWord); 
+								break; 
+							}
+						String pigEnd = subString.substring(0,j).concat(pigSuffix);
+						String pigWord = subString.substring(j, subString.length()).concat(pigEnd); 
+						pigString = pigString.concat(pigWord); 
+						break; 
+						}
+					}
+				}
+				if (!(i == (string.length()-1))) {
+					wordStartIndex = i + 1;
+					pigString = pigString.concat(" ");
+				}	 
+			}
+		}
+		
+		return pigString; 
 	}
 
 	/**
@@ -266,8 +490,13 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String numString = Integer.toString(input); 
+		Integer sumCheck = 0; 
+		for (int i = 0; i < numString.length(); i ++) {
+			Integer digit = Integer.parseInt(numString.substring(i,i+1)); 
+			sumCheck = (int) (sumCheck + Math.pow(digit, (numString.length()))); 
+		}
+		return (sumCheck.equals((Integer)input)); 
 	}
 
 	/**
@@ -281,8 +510,33 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		
+		int[] primesOnetoFifty = {2,3,5,7,11,13,17,19,23,29,31,37,41,43,47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463};  
+		List<Long> primeFactors = new ArrayList<Long>(); 
+			
+		for (int i = 0;i < primesOnetoFifty.length; i++  ) { 	
+			int count = 0; 
+			int remainder = 0; 
+			int quotient = (int) l;
+			//case where number is divisible by the prime 
+			while (remainder == 0 ) {
+					int quotientOld = quotient; 
+					int quotientNew = quotientOld/primesOnetoFifty[i]; 
+					remainder = quotient%primesOnetoFifty[i]; 
+					if (remainder == 0) {
+						count = count + 1; 
+					} 
+					quotient = quotientNew; 
+			}
+			//System.out.println("Count: "+count);
+			if (count == 0) {
+				continue; 
+			} 
+			for (int j = 1; j <= count; j++) {
+				primeFactors.add((long) primesOnetoFifty[i]); 
+			} 
+		}
+		return primeFactors;
 	}
 
 	/**
@@ -312,7 +566,10 @@ public class EvaluationService {
 	 * quick brown fox jumps over the lazy dog.
 	 */
 	static class RotationalCipher {
+		
 		private int key;
+		
+		List<Character> alphabet = new ArrayList<>(); 
 
 		public RotationalCipher(int key) {
 			super();
@@ -320,8 +577,96 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			alphabet.add('a'); alphabet.add('b'); alphabet.add('c');alphabet.add('d');  
+			alphabet.add('e'); alphabet.add('f'); alphabet.add('g');alphabet.add('h'); 
+			alphabet.add('i'); alphabet.add('j'); alphabet.add('k');alphabet.add('l'); 
+			alphabet.add('m'); alphabet.add('n'); alphabet.add('o');alphabet.add('p'); 
+			alphabet.add('q'); alphabet.add('r'); alphabet.add('s');alphabet.add('t'); 
+			alphabet.add('u'); alphabet.add('v'); alphabet.add('w');alphabet.add('x'); 
+			alphabet.add('y'); alphabet.add('z'); 
+			
+			int wordStartIndex = 0; 
+			int wordEndIndex = 0;  
+			String cipherString = ""; 
+			for (int i = 0; i < string.length(); i++) {
+				//checks if end of word is reached 
+				if (Character.isSpaceChar((Character)string.charAt(i)) || ((Character)string.charAt(i)).equals((Character)',') || ((Character)string.charAt(i)).equals((Character)'!') || ((Character)string.charAt(i)).equals((Character)'.') || (i == (string.length()-1))) { 
+					//checks if at end of string 
+					if (i == (string.length()-1)) {
+						wordEndIndex = i+1; 
+					} else  {
+						wordEndIndex = i; 
+					}
+					
+					//constructs substring containing one word 
+					String subString = string.substring(wordStartIndex, wordEndIndex);
+					
+					// --- new logic here ---
+					String cipherWord = ""; 
+					
+					//only make replacement with words(substrings) that start with letters
+					if (Character.isLetter(string.charAt(wordStartIndex))) {
+						
+						for (int j = 0; j < subString.length(); j++) { 	
+						
+							int retrieveIndex; 
+							Character currentCharacter =  subString.charAt(j); 
+							if (((currentCharacter).equals((Character)'!'))) {
+								String charToAppend = "!"; 
+								cipherWord  = cipherWord.concat(charToAppend); 
+								continue; 
+							}
+							if (((currentCharacter).equals((Character)'\''))) {
+								String charToAppend = "\'"; 
+								cipherWord  = cipherWord.concat(charToAppend); 
+								continue; 
+							}
+							if (((currentCharacter).equals((Character)'.'))) {
+								String charToAppend = "."; 
+								cipherWord  = cipherWord.concat(charToAppend); 
+								continue; 
+							}
+							if (Character.isUpperCase(currentCharacter)) {
+								currentCharacter = Character.toLowerCase(currentCharacter);
+							}
+							int currentCharacterIndexInAlphabet = alphabet.indexOf(currentCharacter); 
+							if ((currentCharacterIndexInAlphabet + key > 25)) {
+								retrieveIndex = (currentCharacterIndexInAlphabet + key) - 26; 
+							} else {
+								retrieveIndex = currentCharacterIndexInAlphabet + key; 
+							}
+							if (Character.isUpperCase(subString.charAt(j))) {
+								String newLetter = Character.toString(alphabet.get(retrieveIndex)).toUpperCase(); 
+								cipherWord = cipherWord.concat(newLetter); 
+							} else {
+								String newLetter = Character.toString(alphabet.get(retrieveIndex)); 
+								cipherWord = cipherWord.concat(newLetter); 
+							}
+						}
+						//adds the cipherWord to the output String 
+						cipherString = cipherString.concat(cipherWord); 
+						
+					} else {
+						
+						cipherString = cipherString.concat(subString); 
+					}
+	
+					if (((Character)string.charAt(i)).equals((Character)',')) {
+						cipherString = cipherString.concat(","); 
+					}
+					
+					//reassigns wordStartIndex to start of next word and adds a space to end of output
+					//string if not at the end of the input string
+					
+					if (!(i == (string.length()-1))) {
+						wordStartIndex = i + 1;
+						if (!(((Character)string.charAt(i)).equals((Character)','))) {
+							cipherString = cipherString.concat(" ");
+						}
+					}
+				}
+			}
+			return cipherString;
 		}
 
 	}
@@ -339,8 +684,53 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		
+		if (i == 1) {return 2;} 
+		if (i == 2) {return 3;}
+		
+		//calculate primes up to the nth for n greater than 2
+		
+		List<Integer> primeList = new ArrayList<>(); 
+		primeList.add(2); 
+		primeList.add(3); 
+	
+		//Initialize some variables 
+		int primeChecker = 5; 
+		int primeCounter = 2; 
+		int lastPrimeIndex = 1;
+		int lastPrime = 3; 
+		
+		//while we have not filled the list up to what is asked for 
+		
+		
+		while (primeCounter <= i) {
+			
+			int remainder = 0; 
+			
+			// starting at 3 then counting down if we can add the next possible number up from 3
+			
+			for (int j = lastPrimeIndex; j >= 0; j-- ) {
+			
+				remainder = primeChecker%(primeList.get(j)); 
+				
+				System.out.println(primeChecker%(primeList.get(j))); 
+				
+				if (remainder == 0 ) {
+					//if divisible by a prime, it is not prime
+					
+					primeChecker = lastPrime + 2;  
+				}
+			} 
+			if (remainder != 0 )  {
+			primeList.add(primeChecker); 
+			primeCounter = primeCounter + 1; 
+			lastPrimeIndex = lastPrimeIndex + 1;
+			lastPrime = primeChecker; 
+			primeChecker = lastPrime + 2; 
+			}
+		}
+		
+		return primeList.get(i-1);
 	}
 
 	/**
@@ -375,9 +765,88 @@ public class EvaluationService {
 		 * @param string
 		 * @return
 		 */
+		static List<Character> alphabet = new ArrayList<>(); 
+		static List<Character> atbashAlphabet = new ArrayList<>(); 
+		
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			
+			alphabet.add('a'); alphabet.add('b'); alphabet.add('c');alphabet.add('d');  
+			alphabet.add('e'); alphabet.add('f'); alphabet.add('g');alphabet.add('h'); 
+			alphabet.add('i'); alphabet.add('j'); alphabet.add('k');alphabet.add('l'); 
+			alphabet.add('m'); alphabet.add('n'); alphabet.add('o');alphabet.add('p'); 
+			alphabet.add('q'); alphabet.add('r'); alphabet.add('s');alphabet.add('t'); 
+			alphabet.add('u'); alphabet.add('v'); alphabet.add('w');alphabet.add('x'); 
+			alphabet.add('y'); alphabet.add('z'); 
+			
+			atbashAlphabet.add('z'); atbashAlphabet.add('y'); atbashAlphabet.add('x'); 
+			atbashAlphabet.add('w'); atbashAlphabet.add('v'); atbashAlphabet.add('u'); 
+			atbashAlphabet.add('t'); atbashAlphabet.add('s'); atbashAlphabet.add('r');
+			atbashAlphabet.add('q'); atbashAlphabet.add('p'); atbashAlphabet.add('o'); 
+			atbashAlphabet.add('n'); atbashAlphabet.add('m'); atbashAlphabet.add('l'); 
+			atbashAlphabet.add('k'); atbashAlphabet.add('j'); atbashAlphabet.add('i'); 
+			atbashAlphabet.add('h'); atbashAlphabet.add('g'); atbashAlphabet.add('f'); 
+			atbashAlphabet.add('e'); atbashAlphabet.add('d'); atbashAlphabet.add('c'); 
+			atbashAlphabet.add('b'); atbashAlphabet.add('a');   
+			
+			
+			int wordStartIndex = 0; 
+			int wordEndIndex = 0;  
+			String englishString = ""; 
+			String lowerEnglishString =""; 
+			String atbashString = ""; 
+			
+			for (int i = 0; i < string.length(); i++) {
+				//checks if end of word is reached 
+				if (Character.isSpaceChar((Character)string.charAt(i)) || ((Character)string.charAt(i)).equals((Character)',') || ((Character)string.charAt(i)).equals((Character)'.') || (i == (string.length()-1))) { 
+					//checks if at end of string 
+					if (i == (string.length()-1)) {
+						wordEndIndex = i+1; 
+					} else  {
+						wordEndIndex = i; 
+					}
+					
+					//constructs substring containing one word 
+					String subString = string.substring(wordStartIndex, wordEndIndex);
+					
+					//concatenate into an eglishString 
+					if (subString.contains(".")) {
+						englishString = englishString.concat(subString.substring(0, (subString.length())-1)); 
+					} else {
+						englishString = englishString.concat(subString); 
+					}
+					
+					// reset startIndex variable if not at end of string
+					if (!(i == (string.length()-1))) {
+						wordStartIndex = i + 1;
+					}
+				}
+				//end of code that creates an english string with no spaces or puncutaion
+			}
+			//now working with englishString
+			for (int j = 0; j < englishString.length(); j++ ) {
+				
+				lowerEnglishString = englishString.toLowerCase();
+				
+				//create the atbashString
+				
+				Character currentCharacter = lowerEnglishString.charAt(j); 
+				int indexInAlphabet = alphabet.indexOf(currentCharacter); 
+				
+				if (Character.isLetter(currentCharacter)) {
+					atbashString = atbashString.concat(Character.toString(atbashAlphabet.get(indexInAlphabet)));
+				//case of numbers 
+				} else {
+					atbashString = atbashString.concat(Character.toString(currentCharacter));
+				}
+				//break into segments of five characters
+				if ((((j+1)%5 == 0) && (j != 0)) && ((!(j == (englishString.length()-1))))) {
+					
+					atbashString = atbashString.concat(" ");   
+				}
+				
+			}			
+			System.out.println("lowerEnglishString: "+lowerEnglishString);
+			return atbashString;
 		}
 
 		/**
